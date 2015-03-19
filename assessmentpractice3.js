@@ -18,5 +18,67 @@ The check digit for ISBN-13 is calculated by multiplying each digit alternately 
 
 Create a function that takes a string and returns true if that is a valid ISBN-13 and false otherwise.
 
+PSEDUOCODE
+
+ok, looks like I need regex for spaces and hypens.  should use .replace for the string
+
 */
+var sget = require("sget");
+
+
+function checkISBN(isbn){
+
+	var isbnNumber = userInput(isbn); 
+	
+	if(isValidISBN(isbnNumber)){
+		console.log("\n" + isbnNumber + " is a valid ISBN!\n");
+	} else {
+		console.log("\n" + isbnNumber + " is not a valid ISBN!\n");
+	}
+}
+
+
+function userInput(isbnInput){ // for future reference if I want to get userInput eventually
+
+	var isbnNumberInput = isbnInput.replace(/\s+|-+/g, "");
+	return isbnNumberInput;
+
+}
+
+
+function isValidISBN(isbn){  //turn into number, turn into array, apply specific math against even or odd indexes of array
+	
+	var isbnArray = isbn.split("").map(Number);
+
+	var isbnCounter = 0;
+	var isbnCheckDigit = isbnArray.pop();
+
+
+	for(var i = 0; i < isbnArray.length; i++){
+		if(isbnArray[i] === 0 || isbnArray[i] % 2 === 0){
+			isbnCounter += isbnArray[i];
+			console.log(isbnCounter);
+			
+		} else {
+			var multiplyByThree = isbnArray[i] * 3;
+			isbnCounter +=multiplyByThree;
+			console.log(isbnCounter);
+			
+		}
+	}
+
+	var isbnChecker = (10 - isbnCounter%10)%10;
+
+	console.log("This is the ISBN counter.  " + isbnCounter + " This is the ISBN checker.  " + isbnChecker + "  This is the isbn digitchecker: " + isbnCheckDigit);
+
+	if(isbnCounter === isbnCheckDigit){
+		return true;
+	} else{
+		return false;
+	}
+
+}
+
+
+checkISBN("978   0470059--029");
 
