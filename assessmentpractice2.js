@@ -40,11 +40,13 @@ produces
 array
 => [ { n: 5 }, { n: 5 } ]
 
+I am having problems calling functino methods now
+
 */
 
 var sget = require("sget");
 
-var Bicycle = function(){
+var Bicycle = function(brand, color, model, salePrice){
 	this.brand = brand;
 	this.color = color;
 	this.model = model;
@@ -59,33 +61,47 @@ var Bicycle = function(){
 var Inventory = function(){
 	this.bicycle = [];
 
-	this.addBicycle = function(){
+	this.addBicycle = function(){  //I forgot how to make the userInput function to make sget nice and only use it on one line.  boo.
+		var newBikeBrand = sget("\nPlease enter your new bikes brand.\n");
+		var newBikeColor = sget("\nPlease enter your new bikes brand.\n");
+		var newBikeModel = sget("\nPlease enter your new bikes brand.\n");
+		var newBikeSalePrice = sget("\nPlease enter your new bikes brand.\n");
+		var newBike = new Bike(newBikeBrand, newBikeColor, newBikeModel, newBikeSalePrice);
+		this.bicycle.push(newBike);
+	}
 
+	this.removeBicycle = function(){ //loop through to match input to value of bike's brand, maybe one day implement actualy ID system 
+		var bikeToRemove = sget("\nPlease enter the brand of the bike that you would like to remove.\n");
+		for(var i = 0; i < this.bicycle.length; i++){
+		
+			if(bikeToRemove === this.bicycle[i].brand){
+				this.bicycle.splice(newBike);
+			} 
+		}
 	}
 }
 
 
 function inventoryMenu(){
-	var userInput = sget("\nPlease tell BIMS what to do by making a choice by picking the appropriate number.\n1.  Display your Inventory.\n2.  Add bikes to your inventory.\n3.  Remove bikes from your inventory.\n4.  Quit BIMS\n").trim();
+	var userInput = sget("\nPlease tell BIMS what to do by making a choice by picking the appropriate number.\n\n1.  Display your Inventory.\n2.  Add bikes to your inventory.\n3.  Remove bikes from your inventory.\n4.  Quit BIMS\n").trim();
 	switch (userInput){
 		case "1":
-			
+			//display inventory
 			inventoryMenu();
 			break;
 
 		case "2":
-
+			Inventory.addBicycle();
 			inventoryMenu();
 			break;
 
 		case "3":
-
+			//delete bike
 			inventoryMenu();
 			break;
 
 		case "4":
-
-			inventoryMenu();
+			quit();
 			break;
 
 		case "":
@@ -101,7 +117,8 @@ function inventoryMenu(){
 }
 
 function quit(){
-	console.log("\nBIMS is shutting down.\n......................\nThanks you for using the BIMS, brought to you by MCorp.\n")
+	console.log("\nBIMS is shutting down.\n......................\nThanks you for using the BIMS, brought to you by MCorp.\n");
+	process.exit[0];
 }
 
 
