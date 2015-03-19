@@ -40,7 +40,9 @@ produces
 array
 => [ { n: 5 }, { n: 5 } ]
 
-I am having problems calling functino methods now
+I am having problems calling functino methods now.  I tried putting
+inventorymethod within the inventory object, and I still couldn't call the
+methods correctly.  I need to check this out more.
 
 */
 
@@ -52,7 +54,11 @@ var Bicycle = function(brand, color, model, salePrice){
 	this.model = model;
 	this.salePrice = salePrice;
 
-	this.changeSalePrice = function(){
+	this.changeSalePrice = function(){  //need to choose bike, the change salePrice. 
+		var bikeChoice = sget("Please choose the bike you would like to change the price of: \n").trim();
+
+			//ok i just realized that maybe this bike bject needs to be within the overall inventory object.... but I am not sure
+		//if(bikeChoice === brand)
 
 	};
 
@@ -62,22 +68,28 @@ var Inventory = function(){
 	this.bicycle = [];
 
 	this.addBicycle = function(){  //I forgot how to make the userInput function to make sget nice and only use it on one line.  boo.
-		var newBikeBrand = sget("\nPlease enter your new bikes brand.\n");
-		var newBikeColor = sget("\nPlease enter your new bikes brand.\n");
-		var newBikeModel = sget("\nPlease enter your new bikes brand.\n");
-		var newBikeSalePrice = sget("\nPlease enter your new bikes brand.\n");
+		var newBikeBrand = sget("\nPlease enter your new bikes brand.\n").trim();
+		var newBikeColor = sget("\nPlease enter your new bikes brand.\n").trim();
+		var newBikeModel = sget("\nPlease enter your new bikes brand.\n").trim();
+		var newBikeSalePrice = sget("\nPlease enter your new bikes brand.\n").trim();
 		var newBike = new Bike(newBikeBrand, newBikeColor, newBikeModel, newBikeSalePrice);
 		this.bicycle.push(newBike);
-	}
+	};
 
 	this.removeBicycle = function(){ //loop through to match input to value of bike's brand, maybe one day implement actualy ID system 
-		var bikeToRemove = sget("\nPlease enter the brand of the bike that you would like to remove.\n");
+		var bikeToRemove = sget("\nPlease enter the brand of the bike that you would like to remove.\n").trim();
 		for(var i = 0; i < this.bicycle.length; i++){
-		
 			if(bikeToRemove === this.bicycle[i].brand){
-				this.bicycle.splice(newBike);
-			} 
+				this.bicycle[i].splice(newBike, 1);
+				console.log("\nRemoving the bicycle now...\n..........................\n");	
 		}
+	};
+
+	this.displayInventory = function(){
+
+
+	};
+
 	}
 }
 
@@ -91,7 +103,7 @@ function inventoryMenu(){
 			break;
 
 		case "2":
-			Inventory.addBicycle();
+			Inventory.addBicycle(); //WHY ARE YOU NOT A FUNCTION EVER AAH
 			inventoryMenu();
 			break;
 
