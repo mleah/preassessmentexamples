@@ -44,6 +44,8 @@ I am having problems calling functino methods now.  I tried putting
 inventorymethod within the inventory object, and I still couldn't call the
 methods correctly.  I need to check this out more.
 
+I FIGURED IT OUT-I FORGOT TO MAKE AN INVENTORY OBJECT . FOr future refernce, make sure to make your object  :)
+
 */
 
 var sget = require("sget");
@@ -54,79 +56,75 @@ var Bicycle = function(brand, color, model, salePrice){
 	this.model = model;
 	this.salePrice = salePrice;
 
-	this.changeSalePrice = function(){  //need to choose bike, the change salePrice. 
-		var bikeChoice = sget("Please choose the bike you would like to change the price of: \n").trim();
+	this.changeSalePrice = function(){  //need to choose bike, then change salePrice. 
+		var bikeChoice = getUserInput("Please choose the bike you would like to change the price of: \n");
 
-			//ok i just realized that maybe this bike bject needs to be within the overall inventory object.... but I am not sure
+			
 		//if(bikeChoice === brand)
 
 	};
 
-}
+};
 
 var Inventory = function(){
-	this.bicycle = [];
+	this.bicycles = [];
 
-	this.addBicycle = function(){  //I forgot how to make the userInput function to make sget nice and only use it on one line.  boo.
-		var newBikeBrand = sget("\nPlease enter your new bikes brand.\n").trim();
-		var newBikeColor = sget("\nPlease enter your new bikes brand.\n").trim();
-		var newBikeModel = sget("\nPlease enter your new bikes brand.\n").trim();
-		var newBikeSalePrice = sget("\nPlease enter your new bikes brand.\n").trim();
-		var newBike = new Bike(newBikeBrand, newBikeColor, newBikeModel, newBikeSalePrice);
-		this.bicycle.push(newBike);
+	this.addBicycle = function(brand, color, model, price){  
+		this.bicycles.push(new Bicycle(brand, color, model, price));
 	};
 
-	this.removeBicycle = function(){ //loop through to match input to value of bike's brand, maybe one day implement actualy ID system 
+	this.removeBicycle = function(){ //loop through to match input to value of bike's brand, maybe one day implement actual ID system 
 		var bikeToRemove = sget("\nPlease enter the brand of the bike that you would like to remove.\n").trim();
-		for(var i = 0; i < this.bicycle.length; i++){
-			if(bikeToRemove === this.bicycle[i].brand){
-				this.bicycle[i].splice(newBike, 1);
+		for(var i = 0; i < this.bicycles.length; i++){
+			if(bikeToRemove === this.bicycles[i].brand){
+				this.bicycles[i].splice(newBike, 1);
 				console.log("\nRemoving the bicycle now...\n..........................\n");	
+			}
 		}
 	};
 
 	this.displayInventory = function(){
-
-
+		for (var i = 0; i < this.bicycles.length; i++) {
+			console.log("\nBrand: " + this.bicycles[i].brand + "  Color: " + this.bicycles[i].color + "  Model: " +  this.bicycles[i].model + "  Price: " + this.bicycles[i].price + "\n");
+		}
 	};
 
-	}
-}
+	this.inventoryMenu = function(){
+		var userInput = getUserInput("\nPlease tell BIMS what to do by making a choice by picking the appropriate number.\n\n1.  Display your Inventory.\n2.  Add bikes to your inventory.\n3.  Remove bikes from your inventory.\n4.  Quit BIMS\n");
+		switch (userInput){
+			case "1":
+				this.displayInventory();
+				this.inventoryMenu();
+				break;
 
+			case "2":
+				this.addBicycle(getUserInput("\nPlease enter the brand.\n"), getUserInput("Please enter the color.\n"), getUserInput("Please enter the model.\n"), getUserInput("Please enter the price.\n"));
+				this.inventoryMenu();
+				break;
 
-function inventoryMenu(){
-	var userInput = sget("\nPlease tell BIMS what to do by making a choice by picking the appropriate number.\n\n1.  Display your Inventory.\n2.  Add bikes to your inventory.\n3.  Remove bikes from your inventory.\n4.  Quit BIMS\n").trim();
-	switch (userInput){
-		case "1":
-			//display inventory
-			inventoryMenu();
-			break;
+			case "3":
+				//delete bike
+				this.inventoryMenu();
+				break;
 
-		case "2":
-			Inventory.addBicycle(); //WHY ARE YOU NOT A FUNCTION EVER AAH
-			inventoryMenu();
-			break;
+			case "4":
+				quit();
+				break;
 
-		case "3":
-			//delete bike
-			inventoryMenu();
-			break;
+			case "":
+				console.log("\nPlease make sure to enter input!\n");
+				this.inventoryMenu();
+				break;
 
-		case "4":
-			quit();
-			break;
-
-		case "":
-			console.log("\nPlease make sure to enter input!\n");
-			inventoryMenu();
-			break;
-
-		default:
-			console.log("\nPlease make sure to choose a valid number.\n");
-			inventoryMenu();
-			break;
+			default:
+				console.log("\nPlease make sure to choose a valid number.\n");
+				this.inventoryMenu();
+				break;
 		}
-}
+	}
+};
+
+
 
 function quit(){
 	console.log("\nBIMS is shutting down.\n......................\nThanks you for using the BIMS, brought to you by MCorp.\n");
@@ -134,8 +132,15 @@ function quit(){
 }
 
 
-console.log("\nWelcome to Bicycle Inventory Management System (BIMS)!\n  BIMS is useful for tracking your inventory, as well as adding, removing, and changing the price of your bikes.\n  Smooth sailing.")
-inventoryMenu();
+function getUserInput(message) {
+	return sget(message).trim();
+}
+
+
+console.log("\nWelcome to Bicycle Inventory Management System (BIMS)!\n\nBIMS is useful for tracking your inventory, as well as adding, removing, and changing the price of your bikes.\nSmooth sailing.");
+
+var bims = new Inventory();
+bims.inventoryMenu();
 
 
 
